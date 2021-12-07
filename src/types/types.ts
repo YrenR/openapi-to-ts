@@ -149,6 +149,8 @@ export interface ITypeScriptProperty {
    * The type of value, such as `string`.
    */
   valueType: SchemaObjectType;
+
+  importType?: string[];
 }
 
 /**

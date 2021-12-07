@@ -6,7 +6,7 @@ import {toPascalCase} from './toPascalCase';
  * For example, `#/components/schemas/NewPet` becomes `NewPet`.
  * @param ref the value of the ref, such as `#/components/schemas/NewPet`.
  */
-export const getNameFromRef = (ref: string | undefined): string => {
+export const getNameEnumFromRef = (ref: string | undefined): string => {
   if (!ref) return '';
-  return `I${toPascalCase(getSchemaNameFromRef(ref))}`; // borrar interfaz a mano
+  return `${toPascalCase(getSchemaNameFromRef(ref))}`;
 };

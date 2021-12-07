@@ -3,12 +3,16 @@ import {getSchemaObjectType, mapSchemaToTypeValue} from '../utils';
 
 /**
  * Generates a TypeScript type object based on a OpenAPI 3.0 schema.
- * @param name the name of the schema.
+ * @param nameSchema the name of the schema.
  * @param schemaObject the schema object to convert.
  */
-export const generateTSType = (name: string, schemaObject: IOpenAPISchemaObject): ITypeScriptType => {
+export const generateTSType = (
+  nameSchema: string,
+  schemaObject: IOpenAPISchemaObject,
+  prefixWith = false
+): ITypeScriptType => {
   const schemaObjectType: SchemaObjectType | undefined = getSchemaObjectType(schemaObject);
-
+  const name = prefixWith ? `E${nameSchema}` : `asd${nameSchema}`;
   return {
     name,
     comment: schemaObject.description,

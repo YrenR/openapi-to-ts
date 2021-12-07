@@ -1,9 +1,9 @@
 import {IOpenAPIReferenceObject, IOpenAPISchemaObject, ITypeScriptProperty, SchemaObjectType} from '../types';
 import {getSchemaObjectType, mapSchemaToTypeValue} from '../utils';
 import {getSchemaNameFromRef} from '../utils/getSchemaNameFromRef';
+import {getNameFromRef} from '../utils/getNameFromRef';
 import {isReferenceObject} from '../utils/isReferenceObject';
 import {toCamelCase} from '../utils/toCamelCase';
-
 /**
  * Converts a OpenAPI 3.0 property to TypeScript property object.
  * @param schemaObject the schema object to convert the properties of.
@@ -27,22 +27,39 @@ export function generateTSProperty(
   if (isReferenceObject(schemaObject)) {
     /** Fallback to $ref name. */
     const propertyName = name || toCamelCase(getSchemaNameFromRef(schemaObject.$ref));
+    const value = mapSchemaToTypeValue(schemaObject);
+    const importType: string[] = [];
+
+    const nameFromRef = getNameFromRef(schemaObject.$ref);
+    if (nameFromRef !== '') importType.push(nameFromRef);
+
     generatedProperty = {
       name: propertyName,
       nullable: false,
       optional: !requiredProperties?.includes(propertyName),
-      value: mapSchemaToTypeValue(schemaObject),
-      valueType: schemaObjectType || 'string'
+      value,
+      valueType: schemaObjectType || 'string',
+      importType
     };
   } else {
     /** Fall back to a generic map. */
+    const value = mapSchemaToTypeValue(schemaObject);
     const propertyName = name || '[key: string]';
+
+    const importType: string[] = [];
+
+    if (schemaObject.items && schemaObject.items?.$ref !== '') {
+      const itemsType: string = getNameFromRef(schemaObject.items.$ref);
+      importType.push(itemsType);
+    }
+
     generatedProperty = {
       name: propertyName,
       nullable: schemaObject.nullable || false,
       optional: !name ? false : !requiredProperties?.includes(propertyName),
-      value: mapSchemaToTypeValue(schemaObject),
-      valueType: schemaObjectType || 'string'
+      value,
+      valueType: schemaObjectType || 'string',
+      importType
     };
   }
 

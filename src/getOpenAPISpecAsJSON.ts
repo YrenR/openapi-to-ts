@@ -14,7 +14,11 @@ const isRemoteFile = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@
  * @param filePath the path to the OpenAPI 3.0 specification file to convert.
  * @param githubToken the github token that should be attached to the request.
  */
-export const getOpenAPISpecAsJSON = async (filePath: string, githubToken?: string): Promise<IOpenAPISpecFile> => {
+export const getOpenAPISpecAsJSON = async (
+  filePath: string,
+  githubToken?: string,
+  isYaml?: boolean
+): Promise<IOpenAPISpecFile> => {
   console.log(chalk.blue(`Loading OpenAPI 3.0 specification file from: ${filePath}`));
 
   try {
@@ -32,12 +36,12 @@ export const getOpenAPISpecAsJSON = async (filePath: string, githubToken?: strin
     }
 
     /** Check if the OpenAPI 3.0 spec is a YAML or JSON file. Then we parse it accordingly. */
-    if (isYamlFile.test(filePath)) {
+    if (isYamlFile.test(filePath) || isYaml) {
       return yaml.safeLoad(rawSpecFile) as IOpenAPISpecFile;
     } else {
       return JSON.parse(rawSpecFile) as IOpenAPISpecFile;
     }
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as any);
   }
 };

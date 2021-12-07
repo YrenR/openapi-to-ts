@@ -16,7 +16,7 @@ export const generateTSProperties = (schemaObject: IOpenAPISchemaObject): ITypeS
 
   if (schemaObject.properties) {
     for (const [key, value] of Object.entries(schemaObject.properties)) {
-      generatedProperties.push(generateTSProperty(value, schemaObject.required, key));
+      generatedProperties.push(generateTSProperty(value, schemaObject.required, key)); //
     }
   }
 
@@ -31,7 +31,7 @@ export const generateTSProperties = (schemaObject: IOpenAPISchemaObject): ITypeS
   }
 
   if (schemaObject.allOf || schemaObject.anyOf || schemaObject.oneOf) {
-    (schemaObject.allOf || schemaObject.anyOf || schemaObject.oneOf || []).map(
+    (schemaObject.allOf || schemaObject.anyOf || schemaObject.oneOf || []).forEach(
       (nestedSchemaObject: IOpenAPISchemaObject | IOpenAPIReferenceObject) => {
         if (isReferenceObject(nestedSchemaObject)) {
           generatedProperties.push(generateTSProperty(nestedSchemaObject, schemaObject.required, null));

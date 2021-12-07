@@ -31,7 +31,8 @@
     "clean": "rimraf dist",
     "dev": "rollup -c ./rollup/rollup.config.js -w",
     "prebuild": "yarn clean",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "pruebas": "yarn build & npx openapi-to-ts -i http://192.168.50.246:9091/q/openapi -o C:/Proyectos/react-native-metacontratasv4/src/interfaces/dto --prefixWithI --isYaml"
   },
   "dependencies": {
     "chalk": "^4.1.0",

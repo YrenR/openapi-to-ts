@@ -10,7 +10,7 @@ export const convertTSTypeToString = (typeObject: ITypeScriptType): string => {
   let typeString = '';
 
   /** Step 1: Write the JSDoc comment above the type being declared. */
-  if (typeObject.comment) typeString += toJSDocComment(typeObject.comment);
+  typeString += toJSDocComment(typeObject.name, typeObject.comment);
 
   /** Step 2: Write the export and name of the type. */
   typeString += `export type ${toPascalCase(typeObject.name)} = `;
@@ -19,7 +19,7 @@ export const convertTSTypeToString = (typeObject: ITypeScriptType): string => {
   typeString += mapTypeValueToString(typeObject.value, typeObject.valueType);
 
   /** Step 4: Write the type closure. */
-  typeString += ';';
+  typeString += `;\n`;
 
   return typeString;
 };
